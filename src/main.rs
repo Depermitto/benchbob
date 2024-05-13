@@ -26,6 +26,7 @@ fn main() -> ExitCode {
         let cmd_start = Instant::now();
         let cmd = Command::new(program)
             .args(program_parts.clone())
+            .stderr(Stdio::null())
             .stdout(Stdio::null())
             .spawn();
 
