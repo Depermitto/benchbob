@@ -19,7 +19,7 @@ pub struct Args {
 
     /// Max runtime in seconds
     #[arg(short, long, default_value_t = 3)]
-    pub timeout: u128,
+    pub timeout: u64,
 
     /// Tells benchbob to measure the whole runtime of the program.
     #[arg(long, default_value_t = false)]
