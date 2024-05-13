@@ -2,7 +2,7 @@ use crate::args::Args;
 use clap::Parser;
 use std::process::{Command, ExitCode, Stdio};
 use std::time::{Duration, Instant};
-use textplots::{Chart, Plot};
+use textplots::{utils, Chart, LabelBuilder, LabelFormat, Plot, Shape};
 
 mod args;
 
@@ -71,18 +71,23 @@ fn main() -> ExitCode {
         .enumerate()
         .map(|(i, time)| (i as f32, time.as_nanos() as f32))
         .collect::<Vec<(f32, f32)>>();
-    let hist = textplots::utils::histogram(&points, min, max, length);
+    let hist = utils::histogram(&points, min, max, length);
 
     Chart::new(180, 60, min, max)
-        .lineplot(&textplots::Shape::Bars(&hist))
+        .lineplot(&Shape::Bars(&hist))
+        .x_label_format(LabelFormat::Custom(Box::new(|ns| {
+            format!("{:?}", Duration::from_nanos(ns as u64))
+        })))
         .display();
 
     println!(
-        "Min = {:?}
+        "Total runs = {}
+Min = {:?}
 Max = {:?}
 Average = {:?}
 Median = {:?}
 Time taken = {:?}",
+        length,
         Duration::from_nanos(min as u64),
         Duration::from_nanos(max as u64),
         Duration::from_nanos(median as u64),
